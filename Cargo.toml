@@ -1,0 +1,29 @@
+[package]
+name = "pleme-brazilian-validators"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "Brazilian document and format validators for Pleme platform (CPF, CNPJ, CEP, phone, PIX)"
+repository = "https://github.com/pleme-io/pleme-brazilian-validators"
+homepage = "https://github.com/pleme-io/pleme-brazilian-validators"
+readme = "README.md"
+
+[dependencies]
+thiserror = "2.0"
+regex = "1.10"
+lazy_static = "1.4"
+serde = { version = "1.0", features = ["derive"], optional = true }
+async-graphql = { version = "7.0.17", features = ["apollo_tracing", "dataloader"], optional = true }
+
+[dev-dependencies]
+tokio = { version = "1.41", features = ["full"] }
+rstest = "0.18"
+pretty_assertions = "1.4"
+
+[features]
+default = []
+serialization = ["serde"]
+graphql = ["async-graphql", "serialization"]
+full = ["serialization", "graphql"]
+
+
