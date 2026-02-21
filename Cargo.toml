@@ -7,6 +7,8 @@ description = "Brazilian document and format validators for Pleme platform (CPF,
 repository = "https://github.com/pleme-io/pleme-brazilian-validators"
 homepage = "https://github.com/pleme-io/pleme-brazilian-validators"
 readme = "README.md"
+keywords = ["brazil", "cpf", "cnpj", "validation", "brazilian"]
+categories = ["value-formatting"]
 
 [dependencies]
 thiserror = "2.0"
