@@ -36,8 +36,8 @@ pub mod error;
 pub use error::{BrazilianValidationError, ValidationResult};
 
 // Re-export main functions for convenience
-pub use cpf::{validate_cpf, format_cpf, normalize_cpf};
-pub use cnpj::{validate_cnpj, format_cnpj, normalize_cnpj};
-pub use cep::{validate_cep, format_cep, normalize_cep};
-pub use phone::{validate_phone, format_phone, normalize_phone};
+pub use cpf::{validate, validate as validate_cpf, format as format_cpf, normalize as normalize_cpf};
+pub use cnpj::{validate as validate_cnpj, format as format_cnpj, normalize as normalize_cnpj};
+pub use cep::{validate as validate_cep, format as format_cep, normalize as normalize_cep};
+pub use phone::{validate as validate_phone, format as format_phone, normalize as normalize_phone};
 pub use pix::validate_pix_key;

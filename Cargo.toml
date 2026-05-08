@@ -13,7 +13,6 @@ categories = ["value-formatting"]
 [dependencies]
 thiserror = "2.0"
 regex = "1.10"
-lazy_static = "1.4"
 serde = { version = "1.0", features = ["derive"], optional = true }
 async-graphql = { version = "7.0.17", features = ["apollo_tracing", "dataloader"], optional = true }
 

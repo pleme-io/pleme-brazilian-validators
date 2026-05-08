@@ -5,29 +5,21 @@
 
 use crate::error::{BrazilianValidationError, ValidationResult};
 use crate::{cpf, cnpj};
-use lazy_static::lazy_static;
 use regex::Regex;
+use std::sync::LazyLock;
 
-lazy_static! {
-    /// Regex for CPF format
-    static ref CPF_REGEX: Regex = Regex::new(r"^\d{3}\.?\d{3}\.?\d{3}-?\d{2}$").unwrap();
+/// Regex for email format
+static EMAIL_REGEX: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$").unwrap());
 
-    /// Regex for CNPJ format
-    static ref CNPJ_REGEX: Regex = Regex::new(r"^\d{2}\.?\d{3}\.?\d{3}/?\d{4}-?\d{2}$").unwrap();
+/// Regex for PIX phone format (+55 followed by 11 digits)
+static PIX_PHONE_REGEX: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"^\+55\d{11}$").unwrap());
 
-    /// Regex for email format
-    static ref EMAIL_REGEX: Regex = Regex::new(
-        r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-    ).unwrap();
-
-    /// Regex for PIX phone format (+55 followed by 11 digits)
-    static ref PIX_PHONE_REGEX: Regex = Regex::new(r"^\+55\d{11}$").unwrap();
-
-    /// Regex for random PIX key (UUID format)
-    static ref RANDOM_KEY_REGEX: Regex = Regex::new(
-        r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
-    ).unwrap();
-}
+/// Regex for random PIX key (UUID format)
+static RANDOM_KEY_REGEX: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$").unwrap()
+});
 
 /// PIX key types
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -203,12 +195,12 @@ pub fn validate_with_type(key: &str) -> ValidationResult<(PixKeyType, String)> {
 
 /// Check if key matches CPF format
 fn is_cpf_format(key: &str) -> bool {
-    CPF_REGEX.is_match(key)
+    cpf::CPF_REGEX.is_match(key)
 }
 
 /// Check if key matches CNPJ format
 fn is_cnpj_format(key: &str) -> bool {
-    CNPJ_REGEX.is_match(key)
+    cnpj::CNPJ_REGEX.is_match(key)
 }
 
 /// Check if key matches email format

@@ -4,13 +4,12 @@
 //! and two check digits calculated using modulo 11.
 
 use crate::error::{BrazilianValidationError, ValidationResult};
-use lazy_static::lazy_static;
 use regex::Regex;
+use std::sync::LazyLock;
 
-lazy_static! {
-    /// Regex for CPF format (with or without punctuation)
-    static ref CPF_REGEX: Regex = Regex::new(r"^\d{3}\.?\d{3}\.?\d{3}-?\d{2}$").unwrap();
-}
+/// Regex for CPF format (with or without punctuation)
+pub static CPF_REGEX: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"^\d{3}\.?\d{3}\.?\d{3}-?\d{2}$").unwrap());
 
 /// Known invalid CPFs (all same digits)
 const INVALID_CPFS: [&str; 10] = [
@@ -79,11 +78,6 @@ pub fn validate(cpf: &str) -> ValidationResult<String> {
     Ok(cleaned)
 }
 
-/// Alias for validate() for consistent API
-pub fn validate_cpf(cpf: &str) -> ValidationResult<String> {
-    validate(cpf)
-}
-
 /// Normalize a CPF string by removing all non-digit characters
 ///
 /// # Examples
@@ -95,11 +89,6 @@ pub fn validate_cpf(cpf: &str) -> ValidationResult<String> {
 /// ```
 pub fn normalize(cpf: &str) -> String {
     cpf.chars().filter(|c| c.is_ascii_digit()).collect()
-}
-
-/// Alias for normalize() for consistent API
-pub fn normalize_cpf(cpf: &str) -> String {
-    normalize(cpf)
 }
 
 /// Format a CPF string with standard punctuation (XXX.XXX.XXX-XX)
@@ -131,11 +120,6 @@ pub fn format(cpf: &str) -> String {
     } else {
         cpf.to_string()
     }
-}
-
-/// Alias for format() for consistent API
-pub fn format_cpf(cpf: &str) -> String {
-    format(cpf)
 }
 
 /// Check if a string matches CPF format (does not validate check digits)

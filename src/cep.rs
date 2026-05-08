@@ -3,13 +3,12 @@
 //! Brazilian postal code with 8 digits.
 
 use crate::error::{BrazilianValidationError, ValidationResult};
-use lazy_static::lazy_static;
 use regex::Regex;
+use std::sync::LazyLock;
 
-lazy_static! {
-    /// Regex for CEP format (with or without hyphen)
-    static ref CEP_REGEX: Regex = Regex::new(r"^\d{5}-?\d{3}$").unwrap();
-}
+/// Regex for CEP format (with or without hyphen)
+static CEP_REGEX: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"^\d{5}-?\d{3}$").unwrap());
 
 /// Validate a Brazilian CEP (postal code)
 ///
@@ -52,11 +51,6 @@ pub fn validate(cep: &str) -> ValidationResult<String> {
     Ok(cleaned)
 }
 
-/// Alias for validate() for consistent API
-pub fn validate_cep(cep: &str) -> ValidationResult<String> {
-    validate(cep)
-}
-
 /// Normalize a CEP string by removing all non-digit characters
 ///
 /// # Examples
@@ -68,11 +62,6 @@ pub fn validate_cep(cep: &str) -> ValidationResult<String> {
 /// ```
 pub fn normalize(cep: &str) -> String {
     cep.chars().filter(|c| c.is_ascii_digit()).collect()
-}
-
-/// Alias for normalize() for consistent API
-pub fn normalize_cep(cep: &str) -> String {
-    normalize(cep)
 }
 
 /// Format a CEP string with standard punctuation (XXXXX-XXX)
@@ -98,11 +87,6 @@ pub fn format(cep: &str) -> String {
     } else {
         cep.to_string()
     }
-}
-
-/// Alias for format() for consistent API
-pub fn format_cep(cep: &str) -> String {
-    format(cep)
 }
 
 /// Check if a string matches CEP format (does not validate if CEP exists)

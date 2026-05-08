@@ -3,19 +3,17 @@
 //! Supports landline and mobile numbers with area codes (DDD).
 
 use crate::error::{BrazilianValidationError, ValidationResult};
-use lazy_static::lazy_static;
 use regex::Regex;
+use std::sync::LazyLock;
 
-lazy_static! {
-    /// Regex for Brazilian phone format (various formats accepted)
-    /// Matches: +55 11 98765-4321, (11) 98765-4321, 11987654321, etc.
-    static ref PHONE_REGEX: Regex = Regex::new(
-        r"^(\+55\s?)?(\(?\d{2}\)?\s?)?(\d{4,5}[-\s]?\d{4})$"
-    ).unwrap();
+/// Regex for Brazilian phone format (various formats accepted)
+static PHONE_REGEX: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"^(\+55\s?)?(\(?\d{2}\)?\s?)?(\d{4,5}[-\s]?\d{4})$").unwrap()
+});
 
-    /// Strict regex for normalized phone (digits only with optional +)
-    static ref NORMALIZED_PHONE_REGEX: Regex = Regex::new(r"^\+?55?\d{10,11}$").unwrap();
-}
+/// Strict regex for normalized phone (digits only with optional +)
+static NORMALIZED_PHONE_REGEX: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"^\+?55?\d{10,11}$").unwrap());
 
 /// Valid Brazilian area codes (DDD)
 const VALID_DDDS: [&str; 67] = [
@@ -41,6 +39,17 @@ const VALID_DDDS: [&str; 67] = [
     "91", "92", "93", "94", "95", "96", "97", "98", "99",
 ];
 
+/// Strip country code prefix and return the national number part
+fn strip_country_code(phone: &str) -> &str {
+    if phone.starts_with("+55") {
+        &phone[3..]
+    } else if phone.starts_with("55") && phone.len() > 11 {
+        &phone[2..]
+    } else {
+        phone
+    }
+}
+
 /// Validate a Brazilian phone number
 ///
 /// # Arguments
@@ -61,20 +70,12 @@ const VALID_DDDS: [&str; 67] = [
 /// ```
 pub fn validate(phone: &str) -> ValidationResult<String> {
     let cleaned = normalize(phone);
-
-    // Remove country code for length check
-    let without_country = if cleaned.starts_with("+55") {
-        &cleaned[3..]
-    } else if cleaned.starts_with("55") && cleaned.len() > 11 {
-        &cleaned[2..]
-    } else {
-        &cleaned
-    };
+    let without_country = strip_country_code(&cleaned);
 
     // Check length (10 for landline, 11 for mobile)
     if without_country.len() < 10 || without_country.len() > 11 {
         return Err(BrazilianValidationError::InvalidLength {
-            expected: 10, // or 11 for mobile
+            expected: 10,
             actual: without_country.len(),
         });
     }
@@ -99,11 +100,6 @@ pub fn validate(phone: &str) -> ValidationResult<String> {
     Ok(format!("+55{}", without_country))
 }
 
-/// Alias for validate() for consistent API
-pub fn validate_phone(phone: &str) -> ValidationResult<String> {
-    validate(phone)
-}
-
 /// Normalize a phone string by removing all non-digit characters (keeps +)
 ///
 /// # Examples
@@ -118,11 +114,6 @@ pub fn normalize(phone: &str) -> String {
         .chars()
         .filter(|c| c.is_ascii_digit() || *c == '+')
         .collect()
-}
-
-/// Alias for normalize() for consistent API
-pub fn normalize_phone(phone: &str) -> String {
-    normalize(phone)
 }
 
 /// Format a phone string with standard Brazilian formatting
@@ -143,40 +134,26 @@ pub fn normalize_phone(phone: &str) -> String {
 /// ```
 pub fn format(phone: &str) -> String {
     let cleaned = normalize(phone);
+    let without_country = strip_country_code(&cleaned);
+    let prefix = if cleaned != without_country { "+55 " } else { "" };
 
-    // Handle +55 prefix
-    let (prefix, number) = if cleaned.starts_with("+55") {
-        ("+55 ", &cleaned[3..])
-    } else if cleaned.starts_with("55") && cleaned.len() > 11 {
-        ("+55 ", &cleaned[2..])
-    } else {
-        ("", cleaned.as_str())
-    };
-
-    match number.len() {
-        // Mobile: (XX) XXXXX-XXXX
+    match without_country.len() {
         11 => format!(
             "{}({}) {}-{}",
             prefix,
-            &number[0..2],
-            &number[2..7],
-            &number[7..11]
+            &without_country[0..2],
+            &without_country[2..7],
+            &without_country[7..11]
         ),
-        // Landline: (XX) XXXX-XXXX
         10 => format!(
             "{}({}) {}-{}",
             prefix,
-            &number[0..2],
-            &number[2..6],
-            &number[6..10]
+            &without_country[0..2],
+            &without_country[2..6],
+            &without_country[6..10]
         ),
         _ => phone.to_string(),
     }
-}
-
-/// Alias for format() for consistent API
-pub fn format_phone(phone: &str) -> String {
-    format(phone)
 }
 
 /// Check if a phone number is a mobile number
@@ -190,17 +167,7 @@ pub fn format_phone(phone: &str) -> String {
 /// ```
 pub fn is_mobile(phone: &str) -> bool {
     let cleaned = normalize(phone);
-
-    // Remove country code
-    let without_country = if cleaned.starts_with("+55") {
-        &cleaned[3..]
-    } else if cleaned.starts_with("55") && cleaned.len() > 11 {
-        &cleaned[2..]
-    } else {
-        &cleaned
-    };
-
-    // Mobile has 11 digits and starts with 9 after DDD
+    let without_country = strip_country_code(&cleaned);
     without_country.len() == 11 && without_country[2..].starts_with('9')
 }
 
@@ -215,17 +182,7 @@ pub fn is_mobile(phone: &str) -> bool {
 /// ```
 pub fn is_landline(phone: &str) -> bool {
     let cleaned = normalize(phone);
-
-    // Remove country code
-    let without_country = if cleaned.starts_with("+55") {
-        &cleaned[3..]
-    } else if cleaned.starts_with("55") && cleaned.len() > 11 {
-        &cleaned[2..]
-    } else {
-        &cleaned
-    };
-
-    // Landline has 10 digits
+    let without_country = strip_country_code(&cleaned);
     without_country.len() == 10
 }
 
@@ -240,16 +197,7 @@ pub fn is_landline(phone: &str) -> bool {
 /// ```
 pub fn extract_ddd(phone: &str) -> Option<String> {
     let cleaned = normalize(phone);
-
-    // Remove country code
-    let without_country = if cleaned.starts_with("+55") {
-        &cleaned[3..]
-    } else if cleaned.starts_with("55") && cleaned.len() > 11 {
-        &cleaned[2..]
-    } else {
-        &cleaned
-    };
-
+    let without_country = strip_country_code(&cleaned);
     if without_country.len() >= 2 {
         Some(without_country[0..2].to_string())
     } else {
@@ -335,15 +283,7 @@ pub fn get_state_for_ddd(ddd: &str) -> Option<&'static str> {
 /// ```
 pub fn mask(phone: &str) -> String {
     let cleaned = normalize(phone);
-
-    // Remove country code
-    let without_country = if cleaned.starts_with("+55") {
-        &cleaned[3..]
-    } else if cleaned.starts_with("55") && cleaned.len() > 11 {
-        &cleaned[2..]
-    } else {
-        &cleaned
-    };
+    let without_country = strip_country_code(&cleaned);
 
     match without_country.len() {
         11 => format!("({}) *****-{}", &without_country[0..2], &without_country[7..11]),

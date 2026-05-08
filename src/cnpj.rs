@@ -4,13 +4,12 @@
 //! and two check digits calculated using weighted modulo 11.
 
 use crate::error::{BrazilianValidationError, ValidationResult};
-use lazy_static::lazy_static;
 use regex::Regex;
+use std::sync::LazyLock;
 
-lazy_static! {
-    /// Regex for CNPJ format (with or without punctuation)
-    static ref CNPJ_REGEX: Regex = Regex::new(r"^\d{2}\.?\d{3}\.?\d{3}/?\d{4}-?\d{2}$").unwrap();
-}
+/// Regex for CNPJ format (with or without punctuation)
+pub static CNPJ_REGEX: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"^\d{2}\.?\d{3}\.?\d{3}/?\d{4}-?\d{2}$").unwrap());
 
 /// Known invalid CNPJs (all same digits)
 const INVALID_CNPJS: [&str; 10] = [
@@ -78,11 +77,6 @@ pub fn validate(cnpj: &str) -> ValidationResult<String> {
     Ok(cleaned)
 }
 
-/// Alias for validate() for consistent API
-pub fn validate_cnpj(cnpj: &str) -> ValidationResult<String> {
-    validate(cnpj)
-}
-
 /// Normalize a CNPJ string by removing all non-digit characters
 ///
 /// # Examples
@@ -94,11 +88,6 @@ pub fn validate_cnpj(cnpj: &str) -> ValidationResult<String> {
 /// ```
 pub fn normalize(cnpj: &str) -> String {
     cnpj.chars().filter(|c| c.is_ascii_digit()).collect()
-}
-
-/// Alias for normalize() for consistent API
-pub fn normalize_cnpj(cnpj: &str) -> String {
-    normalize(cnpj)
 }
 
 /// Format a CNPJ string with standard punctuation (XX.XXX.XXX/XXXX-XX)
@@ -131,11 +120,6 @@ pub fn format(cnpj: &str) -> String {
     } else {
         cnpj.to_string()
     }
-}
-
-/// Alias for format() for consistent API
-pub fn format_cnpj(cnpj: &str) -> String {
-    format(cnpj)
 }
 
 /// Check if a string matches CNPJ format (does not validate check digits)
