@@ -1,13 +1,13 @@
 {
   "schema_version": 1,
-  "cargo_lock_sha256": "2342801607a6989355d57caeba1f701ce56ec600581bd80571df373201876d63",
+  "cargo_lock_sha256": "08d83dd6c198a3d6b20104048d388fb4e868b64177584514903cf9007120ddbb",
   "target_resolves": {
     "base": {
       "aho-corasick-1.1.4": {
         "runtime_dependencies": [
           {
             "name": "memchr",
-            "package_key": "memchr-2.8.0",
+            "package_key": "memchr-2.8.1",
             "kind": "normal",
             "features": [],
             "uses_default_features": false,
@@ -44,7 +44,7 @@
         "runtime_dependencies": [
           {
             "name": "libc",
-            "package_key": "libc-0.2.183",
+            "package_key": "libc-0.2.186",
             "kind": "normal",
             "features": [],
             "uses_default_features": false,
@@ -54,7 +54,7 @@
           },
           {
             "name": "libc",
-            "package_key": "libc-0.2.183",
+            "package_key": "libc-0.2.186",
             "kind": "normal",
             "features": [],
             "uses_default_features": false,
@@ -64,7 +64,7 @@
           },
           {
             "name": "libc",
-            "package_key": "libc-0.2.183",
+            "package_key": "libc-0.2.186",
             "kind": "normal",
             "features": [],
             "uses_default_features": false,
@@ -300,7 +300,7 @@
           "std"
         ]
       },
-      "futures-timer-3.0.3": {
+      "futures-timer-3.0.4": {
         "runtime_dependencies": [],
         "build_dependencies": [],
         "features": []
@@ -369,7 +369,7 @@
           },
           {
             "name": "memchr",
-            "package_key": "memchr-2.8.0",
+            "package_key": "memchr-2.8.1",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -420,7 +420,7 @@
         "build_dependencies": [],
         "features": []
       },
-      "libc-0.2.183": {
+      "libc-0.2.186": {
         "runtime_dependencies": [],
         "build_dependencies": [],
         "features": [
@@ -447,7 +447,7 @@
           "default"
         ]
       },
-      "memchr-2.8.0": {
+      "memchr-2.8.1": {
         "runtime_dependencies": [],
         "build_dependencies": [],
         "features": [
@@ -456,36 +456,16 @@
           "std"
         ]
       },
-      "mio-1.1.1": {
+      "mio-1.2.1": {
         "runtime_dependencies": [
           {
             "name": "libc",
-            "package_key": "libc-0.2.183",
+            "package_key": "libc-0.2.186",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
             "optional": false,
-            "target": "cfg(unix)",
-            "tree": "target"
-          },
-          {
-            "name": "libc",
-            "package_key": "libc-0.2.183",
-            "kind": "normal",
-            "features": [],
-            "uses_default_features": true,
-            "optional": false,
-            "target": "cfg(target_os = \"hermit\")",
-            "tree": "target"
-          },
-          {
-            "name": "libc",
-            "package_key": "libc-0.2.183",
-            "kind": "normal",
-            "features": [],
-            "uses_default_features": true,
-            "optional": false,
-            "target": "cfg(target_os = \"wasi\")",
+            "target": "cfg(any(unix, target_os = \"hermit\", target_os = \"wasi\"))",
             "tree": "target"
           }
         ],
@@ -538,7 +518,7 @@
           },
           {
             "name": "libc",
-            "package_key": "libc-0.2.183",
+            "package_key": "libc-0.2.186",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -565,7 +545,7 @@
         "build_dependencies": [],
         "features": []
       },
-      "pleme-brazilian-validators-0.1.1": {
+      "pleme-brazilian-validators-0.1.2": {
         "runtime_dependencies": [
           {
             "name": "regex",
@@ -674,7 +654,7 @@
           },
           {
             "name": "memchr",
-            "package_key": "memchr-2.8.0",
+            "package_key": "memchr-2.8.1",
             "kind": "normal",
             "features": [],
             "uses_default_features": false,
@@ -738,7 +718,7 @@
           },
           {
             "name": "memchr",
-            "package_key": "memchr-2.8.0",
+            "package_key": "memchr-2.8.1",
             "kind": "normal",
             "features": [],
             "uses_default_features": false,
@@ -820,7 +800,7 @@
           },
           {
             "name": "futures_timer",
-            "package_key": "futures-timer-3.0.3",
+            "package_key": "futures-timer-3.0.4",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -965,7 +945,7 @@
         "runtime_dependencies": [
           {
             "name": "semver",
-            "package_key": "semver-1.0.27",
+            "package_key": "semver-1.0.28",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -982,7 +962,7 @@
         "build_dependencies": [],
         "features": []
       },
-      "semver-1.0.27": {
+      "semver-1.0.28": {
         "runtime_dependencies": [],
         "build_dependencies": [],
         "features": [
@@ -1004,7 +984,7 @@
           },
           {
             "name": "libc",
-            "package_key": "libc-0.2.183",
+            "package_key": "libc-0.2.186",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -1028,11 +1008,11 @@
         "build_dependencies": [],
         "features": []
       },
-      "socket2-0.6.3": {
+      "socket2-0.6.4": {
         "runtime_dependencies": [
           {
             "name": "libc",
-            "package_key": "libc-0.2.183",
+            "package_key": "libc-0.2.186",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -1148,7 +1128,7 @@
         "build_dependencies": [],
         "features": []
       },
-      "tokio-1.50.0": {
+      "tokio-1.52.3": {
         "runtime_dependencies": [
           {
             "name": "bytes",
@@ -1162,7 +1142,7 @@
           },
           {
             "name": "libc",
-            "package_key": "libc-0.2.183",
+            "package_key": "libc-0.2.186",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -1172,7 +1152,7 @@
           },
           {
             "name": "libc",
-            "package_key": "libc-0.2.183",
+            "package_key": "libc-0.2.186",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -1181,8 +1161,18 @@
             "tree": "target"
           },
           {
+            "name": "libc",
+            "package_key": "libc-0.2.186",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": true,
+            "target": "cfg(target_os = \"wasi\")",
+            "tree": "target"
+          },
+          {
             "name": "mio",
-            "package_key": "mio-1.1.1",
+            "package_key": "mio-1.2.1",
             "kind": "normal",
             "features": [],
             "uses_default_features": false,
@@ -1192,7 +1182,7 @@
           },
           {
             "name": "mio",
-            "package_key": "mio-1.1.1",
+            "package_key": "mio-1.2.1",
             "kind": "normal",
             "features": [],
             "uses_default_features": false,
@@ -1232,19 +1222,19 @@
           },
           {
             "name": "socket2",
-            "package_key": "socket2-0.6.3",
+            "package_key": "socket2-0.6.4",
             "kind": "normal",
             "features": [
               "all"
             ],
             "uses_default_features": true,
             "optional": true,
-            "target": "cfg(not(target_family = \"wasm\"))",
+            "target": "cfg(any(not(target_family = \"wasm\"), all(target_os = \"wasi\", not(target_env = \"p1\"))))",
             "tree": "target"
           },
           {
             "name": "tokio_macros",
-            "package_key": "tokio-macros-2.6.1",
+            "package_key": "tokio-macros-2.7.0",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -1278,7 +1268,7 @@
           "windows-sys"
         ]
       },
-      "tokio-macros-2.6.1": {
+      "tokio-macros-2.7.0": {
         "runtime_dependencies": [
           {
             "name": "proc_macro2",
@@ -1393,7 +1383,7 @@
     "futures-task-0.3.32": {
       "edition": "2018"
     },
-    "futures-timer-3.0.3": {
+    "futures-timer-3.0.4": {
       "edition": "2018"
     },
     "futures-util-0.3.32": {
@@ -1402,17 +1392,17 @@
     "glob-0.3.3": {
       "edition": "2015"
     },
-    "libc-0.2.183": {
+    "libc-0.2.186": {
       "edition": "2021",
       "build_script": "build.rs"
     },
     "lock_api-0.4.14": {
       "edition": "2021"
     },
-    "memchr-2.8.0": {
+    "memchr-2.8.1": {
       "edition": "2021"
     },
-    "mio-1.1.1": {
+    "mio-1.2.1": {
       "edition": "2021"
     },
     "parking_lot-0.12.5": {
@@ -1425,7 +1415,7 @@
     "pin-project-lite-0.2.17": {
       "edition": "2018"
     },
-    "pleme-brazilian-validators-0.1.1": {
+    "pleme-brazilian-validators-0.1.2": {
       "edition": "2021",
       "lib_target": {
         "name": "pleme_brazilian_validators",
@@ -1469,8 +1459,8 @@
     "scopeguard-1.2.0": {
       "edition": "2015"
     },
-    "semver-1.0.27": {
-      "edition": "2018"
+    "semver-1.0.28": {
+      "edition": "2021"
     },
     "signal-hook-registry-1.4.8": {
       "edition": "2015"
@@ -1481,7 +1471,7 @@
     "smallvec-1.15.1": {
       "edition": "2018"
     },
-    "socket2-0.6.3": {
+    "socket2-0.6.4": {
       "edition": "2021"
     },
     "syn-2.0.117": {
@@ -1495,10 +1485,10 @@
       "edition": "2021",
       "proc_macro": true
     },
-    "tokio-1.50.0": {
+    "tokio-1.52.3": {
       "edition": "2021"
     },
-    "tokio-macros-2.6.1": {
+    "tokio-macros-2.7.0": {
       "edition": "2021",
       "proc_macro": true
     },
